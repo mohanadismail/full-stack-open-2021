@@ -11,7 +11,7 @@ const Header = (props) => {
 const Content = (props) => {
   return (
     <p>
-      {props.exercise} {props.number}
+      {props.part} {props.exercises}
     </p>
   )
 }
