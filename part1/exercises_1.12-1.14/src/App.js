@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const Button = ({name, handler}) => {
   return <button onClick={handler}>{name}</button>
@@ -18,19 +18,31 @@ const App = () => {
   //let votes = new Uint8Array(anecdotes.length)
   const [votes, setVotes] = useState(new Uint8Array(anecdotes.length))
   const [selected, setSelected] = useState(0)
+  let mostVotesIndex = useRef(0)
 
   const voteHandler = () => {
     const copy = [...votes]
     copy[selected] += 1
+    let max = 0
+    copy.forEach((value, index) => {
+      if (value > max) {
+        max = value;
+        mostVotesIndex.current = index
+      }
+    })
     setVotes(copy)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <Button name="next anecdote" handler={() => setSelected(Math.floor(Math.random()*(anecdotes.length)))}/>
       <Button name="vote" handler={voteHandler}/>
+      <h1>Anecdote with the most votes</h1>
+      <p>{anecdotes[mostVotesIndex.current]}</p>
+      <p>has {votes[mostVotesIndex.current]} votes</p>
     </div>
   )
 }
