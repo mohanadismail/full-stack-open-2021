@@ -1,5 +1,42 @@
 import { useState } from 'react'
 
+const Filter = ({filter, handleFilter}) => {
+  return (
+    <div>
+        Filter shown with <input
+        value = {filter}
+        onChange = {handleFilter}/>
+      </div>
+  )
+}
+
+const PersonForm = ({newName, newNumber, handleNewPerson, handleNewNumber, handleClick}) => {
+  return (
+    <form>
+        <div>
+          name: <input 
+          value = {newName}
+          onChange = {handleNewPerson}/>
+        </div>
+        <div>
+          number: <input
+          value = {newNumber}
+          onChange = {handleNewNumber}
+          />
+        </div>
+        <div>
+          <button type="submit" onClick={handleClick}>add</button>
+        </div>
+      </form>
+  )
+}
+
+const Persons = ({persons, filterText}) => {
+  return (
+    persons.filter(person => person.name.toLowerCase().includes(filterText.toLowerCase())).map(person => <p>{person.name} {person.number}</p>)
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -37,30 +74,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        Filter shown with <input
-        value = {filter}
-        onChange = {handleFilter}/>
-      </div>
-      <h2>Add new contact</h2>
-      <form>
-        <div>
-          name: <input 
-          value = {newName}
-          onChange = {handleNewPerson}/>
-        </div>
-        <div>
-          number: <input
-          value = {newNumber}
-          onChange = {handleNewNumber}
-          />
-        </div>
-        <div>
-          <button type="submit" onClick={handleClick}>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase())).map(person => <p>{person.name} {person.number}</p>)}
+      <Filter filter={filter} handleFilter={handleFilter} />
+      <h3>Add new contact</h3>
+      <PersonForm newName={newName} handleNewPerson={handleNewPerson} newNumber={newNumber} handleNewNumber={handleNewNumber} handleClick={handleClick}/>
+      <h3>Numbers</h3>
+      <Persons persons={persons} filterText={filter}/>
     </div>
   )
 }
